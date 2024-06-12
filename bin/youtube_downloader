@@ -17,6 +17,10 @@ def process_path(path):
 
 
 def download_video(youtube_id, save_dir, res=None, skip=True):
+
+    # save_path = osp.join(save_dir, f'{youtube_id}.mp4')
+    # if osp.exists(save_path) and skip:
+    #     return
     yt = YouTube(f'https://youtube.com/watch?v={youtube_id}')
     try:
         streams = yt.streams
@@ -50,6 +54,8 @@ def main(save_dir, annotations, skip, res):
 
     for item_id, item in tqdm(data.items()):
         youtube_id = item.get('youtube_id')
+        save_path = osp.join(save_dir, f'{youtube_id}.mp4')
+        if osp.exists(save_path): continue
         if youtube_id is None:
             continue
         download_video(youtube_id, save_dir, skip=skip)
