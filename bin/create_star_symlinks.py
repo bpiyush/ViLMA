@@ -22,21 +22,22 @@ if __name__ == "__main__":
 
     data = load_json(args.annotation)
 
-    # Filter out samples of SSv2 dataset
-    dataset = "something-something-v2"
+    # Filter out samples of STAR dataset
+    dataset = "star"
     data = {k:v for k, v in data.items() if v["dataset"] == dataset}
-    print("Number of samples in SSv2 dataset:", len(data))
+    print("Number of samples in STAR dataset:", len(data))
 
     # Create symlinks
     for k in tqdm(data, desc="Creating symlinks"):
         v = data[k]
-        dataset_idx = v["dataset_idx"]
+        dataset_idx = v["video_file"]
 
         # Find video in the source directory
-        glob_pattern = os.path.join(args.src_dir, f"{dataset_idx}.webm")
+        glob_pattern = os.path.join(args.src_dir, f"{dataset_idx}.mp4")
         paths = glob(glob_pattern)
         assert len(paths) == 1
         src_path = paths[0]
+        assert os.path.exists(src_path)
 
         # Define the destination path
         dst_path = os.path.join(args.dst_dir, os.path.basename(src_path))
